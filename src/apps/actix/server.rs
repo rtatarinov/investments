@@ -1,8 +1,8 @@
 extern crate dotenv;
 
-use actix_web::{App, get, HttpServer, HttpResponse, Responder};
-use std::env;
+use actix_web::{get, App, HttpResponse, HttpServer, Responder};
 use dotenv::dotenv;
+use std::env;
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -16,11 +16,7 @@ pub async fn serve() -> std::io::Result<()> {
     let port = env::var("APP_PORT").expect("APP_PORT not found.");
     let address = format!("{}:{}", host, port);
 
-    let server = HttpServer::new(|| {
-        App::new()
-            .service(hello)
-    })
-        .bind(address.clone())?;
+    let server = HttpServer::new(|| App::new().service(hello)).bind(address.clone())?;
 
     println!("Listening in {}", address);
 
